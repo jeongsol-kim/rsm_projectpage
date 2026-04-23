@@ -1,0 +1,236 @@
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+
+.footer .icon-link {
+    font-size: 25px;
+    color: #000;
+}
+
+.link-block a {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.dnerf {
+  font-variant: small-caps;
+}
+
+
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 3rem;
+}
+
+.teaser {
+  font-family: 'Google Sans', sans-serif;
+}
+
+
+.publication-title {
+}
+
+.publication-banner {
+  max-height: parent;
+
+}
+
+.publication-banner video {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  object-fit: fit;
+}
+
+.publication-header .hero-body {
+}
+
+.publication-title {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-authors {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-venue {
+    color: #555;
+    width: fit-content;
+    font-weight: bold;
+}
+
+.publication-awards {
+    color: #ff3860;
+    width: fit-content;
+    font-weight: bolder;
+}
+
+.publication-authors {
+}
+
+.publication-authors a {
+   color: hsl(204, 86%, 53%) !important;
+}
+
+.publication-authors a:hover {
+    text-decoration: underline;
+}
+
+.author-block {
+  display: inline-block;
+}
+
+.publication-banner img {
+}
+
+.publication-authors {
+  /*color: #4286f4;*/
+}
+
+.publication-video {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+
+    overflow: hidden;
+    border-radius: 10px !important;
+}
+
+.publication-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.publication-body img {
+}
+
+.results-carousel {
+  overflow: hidden;
+}
+
+.results-carousel .item {
+  /* margin: 5px;
+  overflow: hidden;
+  padding: 20px;
+  font-size: 0; */
+  box-sizing: border-box;
+  margin: 0;
+  overflow: hidden;
+  padding: 20px;
+  font-size: 0;
+}
+
+.results-carousel video {
+  margin: 0;
+}
+
+.slider-pagination .slider-page {
+  background: #000000;
+}
+
+.eql-cntrb { 
+  font-size: smaller;
+}
+
+
+/* Slider */
+
+/* === Before/After Image Slider CSS (Updated) === */
+.before-after-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  cursor: default;
+  font-size: 0;
+  /* Height is determined by .ba-before-img aspect ratio */
+}
+
+/* Base styles for BOTH .ba-before-img and the conceptual full .ba-after-img */
+.before-after-slider .ba-before-img { /* Specifically target before image for base sizing */
+  display: block;
+  width: 100%;
+  height: auto; /* This sets the aspect ratio for the component */
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.ba-after-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;        /* MODIFIED: New initial position */
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.ba-after-img {
+  display: block;
+  height: 100%;      /* Crucial: Fixed height based on wrapper (and thus, .ba-before-img) */
+  width: auto;       /* Crucial: Width adjusts to maintain aspect ratio for the fixed height */
+  max-width: none;   /* Important: Prevents constraining to wrapper width if global img max-width is 100% */
+  user-select: none;
+  -webkit-user-drag: none;
+  /* Positioned at the left of its wrapper. The wrapper clips it. */
+}
+
+.ba-slider-handle {
+  position: absolute;
+  /* Center the circular handle on the division point */
+  top: 50%;                             /* Vertically centers the handle on the image */
+  left: 75%;                            /* Initial horizontal position (set by JS, but good default) */
+  transform: translate(-50%, -50%);     /* Adjusts position to center the element itself */
+
+  /* Circular handle appearance */
+  width: 38px;                          /* Diameter of the circle */
+  height: 38px;                         /* Diameter of the circle */
+  background-color: rgba(255, 255, 255, 0.9); /* Circle background */
+  border-radius: 50%;                   /* Makes it a circle */
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+  cursor: pointer;                         /* "Hand shape" cursor */
+  z-index: 2;                           /* Ensures it's above images */
+
+  /* Flexbox to center the arrows inside the circle */
+  display: flex;
+  align-items: center;
+  justify-content: space-around; /* Puts a bit of space around the arrows */
+}
+
+/* Left and Right arrows on the handle */
+.ba-slider-handle::before, /* Left Arrow */
+.ba-slider-handle::after {  /* Right Arrow */
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+  /* Color will be set by individual border-*-color */
+  border-color: transparent;
+}
+
+.ba-slider-handle::before { /* Left Arrow */
+  /* Creates a triangle: overall height 20px, width of triangle base 6px */
+  border-width: 8px 8px 8px 0;
+  border-right-color: rgba(0,0,0,0.6); /* Arrow color */
+}
+
+.ba-slider-handle::after { /* Right Arrow */
+  /* Creates a triangle: overall height 20px, width of triangle base 6px */
+  border-width: 8px 0 8px 8px;
+  border-left-color: rgba(0,0,0,0.6); /* Arrow color */
+}
+
+/* Style for when the slider is being actively dragged */
+.before-after-slider.dragging .ba-slider-handle {
+  cursor: grabbing; /* "Grabbing hand" cursor */
+  /* Optional: slightly change appearance while dragging */
+  background-color: rgba(240, 240, 240, 0.95);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}

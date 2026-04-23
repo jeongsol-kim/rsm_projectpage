@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reward Score Matching: Unifying Reward-based Fine-tuning for Flow and Diffusion Models">
+  <meta name="keywords" content="reward fine-tuning, diffusion models, flow matching, GRPO, reinforcement learning, score matching, RSM">
+  <meta property="og:title" content="Reward Score Matching"/>
+  <meta property="og:description" content="A unified framework for reward-based fine-tuning of flow and diffusion models via reward score matching."/>
+  <meta property="og:url" content="https://YOUR_ID.github.io/YOUR_REPO_NAME/"/>
+  <meta property="og:image" content="static/images/schedules.png"/>
+  <meta name="twitter:title" content="Reward Score Matching">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Reward Score Matching</title>
+  <link rel="icon" type="image/png" href="static/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+  <script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]} });</script>
+
+  <style>
+    .brand { color:#e11d48; }
+    .muted { color:#666; }
+    hr.solid { border-top:2px solid #e5e5e5; }
+    .thumb { border-radius:10px; box-shadow:0 4px 20px rgba(0,0,0,.08); }
+    .fig-caption { font-size:15px; color:#555; line-height:1.65; margin-top:12px; }
+    .contribution-box {
+      border-left:4px solid #e11d48; padding:12px 18px;
+      margin:12px 0; background:#fafafa; border-radius:0 8px 8px 0;
+    }
+    .section-divider { border:none; border-top:2px solid #eee; margin:36px 0; }
+  </style>
+</head>
+
+<body>
+
+<!-- ======= HERO ======= -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+
+          <h1 class="title is-1 publication-title">
+            <span class="brand">Reward Score Matching</span>: Unifying Reward-based Fine-tuning for Flow and Diffusion Models
+          </h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Jeongjae Lee<sup>1*</sup>,</span>
+            <span class="author-block">Jinho Chang<sup>1*</sup>,</span>
+            <span class="author-block">Jeongsol Kim<sup>1†</sup>,</span>
+            <span class="author-block">Jong Chul Ye<sup>1†</sup></span>
+          </div>
+          <div class="is-size-6 publication-authors muted" style="margin-top:6px;">
+            <sup>1</sup> Graduate School of AI, KAIST &nbsp;·&nbsp;
+            <span style="font-size:0.9em;">* First Authors &nbsp; † Corresponding Authors</span>
+          </div>
+          <div style="margin-top:10px;">
+            <span class="tag is-warning is-light" style="font-size:14px; padding:6px 16px; border-radius:20px; font-weight:700;">Under review</span>
+          </div>
+
+          <div style="margin-top:16px;">
+            <a href="static/pdfs/rsm_paper.pdf" target="_blank" class="external-link button is-normal is-rounded is-dark" style="margin:4px;">
+              <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span>
+            </a>
+            <a href="https://arxiv.org/abs/2604.17415v1" target="_blank" class="external-link button is-normal is-rounded is-dark" style="margin:4px;">
+              <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
+            </a>
+            <a href="https://github.com/YOUR_REPO" target="_blank" class="external-link button is-normal is-rounded is-dark" style="margin:4px;">
+              <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
+            </a>
+          </div>
+
+          <div style="margin-top:28px; background:#fff8f0; border:1px solid #fdd; border-radius:12px; padding:18px 28px; text-align:left; max-width:760px; margin-left:auto; margin-right:auto;">
+            <p style="font-size:17px; line-height:1.75; margin:0;">
+              <b>TL;DR:</b> We unify reward-based fine-tuning algorithms for diffusion and flow generative models. This allows us to distinguish the fundamental design choices from others.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= ABSTRACT ======= -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-sixths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified" style="font-size:18px;">
+          <p>Existing reward-based fine-tuning for diffusion or flow-based generative models are motivated by different perspectives such as Soft RL, GFlowNets, and optimal control.
+          As a result, the literature appears fragmented: methods are presented with different objectives, derivations, and stabilization heuristics, making it difficult to tell which differences are fundamental and which are merely implementational.
+          In this paper, we show that many such methods reduce to a single underlying objective, which we term reward score matching (RSM), and that their primary design axis is how the value-guidance surrogate is constructed.
+          Guided by this perspective, we develop simpler redesigns that improve alignment effectiveness and compute efficiency across representative settings with differentiable and black-box rewards.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= RSM FRAMEWORK ======= -->
+<section class="section hero">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-sixths">
+        <h2 class="title is-3">The RSM Framework</h2>
+        <div class="content has-text-justified" style="font-size:18px;">
+
+          <p>Methods derived from Soft RL, GFlowNets, and optimal control all reduce to the same underlying score-matching objective. Their primary differences arise from three coupled design choices:</p>
+
+          <div style="background:#f9f9ff; border:1px solid #dde; border-radius:12px; padding:20px 28px; margin:20px 0; text-align:center;">
+            <p style="font-size:15px; font-weight:700; margin-bottom:10px;">Common RSM Loss:</p>
+            <p style="font-size:17px;">\(\mathcal{L}(\theta) = \mathbb{E}_{t_i, x_{t_i}}\!\Big[ C_1(t_i)\| s^\theta_{t_i} - (s^{\mathrm{ref}}_{t_i} + \Psi_{t_i})\|^2 + C_2(t_i)\| s^\theta_{t_i} - s^{\theta^\dagger}_{t_i}\|^2 \Big]\)</p>
+            <p class="muted" style="font-size:14px; margin-top:8px;">Methods differ only in how $\Psi_{t_i}$ (value guidance), $C_1(t_i)$ (temporal weight), $C_2(t_i)$ (trust region) are constructed.</p>
+          </div>
+
+          <div class="columns" style="margin-top:14px;">
+            <div class="column">
+              <div style="border:1px solid #e0e0e0; border-radius:12px; padding:16px; text-align:center; height:100%;">
+                <p style="font-size:24px; margin-bottom:4px;">🎯</p>
+                <p style="font-weight:700; font-size:15px; margin-bottom:4px;">Estimator Design</p>
+                <p style="font-size:13px; color:#555; margin:0;">First and zeroth-order estimators. Lookahead depth, branching, stochasticity localization. Governs bias–variance–compute tradeoff.</p>
+              </div>
+            </div>
+            <div class="column">
+              <div style="border:1px solid #e0e0e0; border-radius:12px; padding:16px; text-align:center; height:100%;">
+                <p style="font-size:24px; margin-bottom:4px;">⚖️</p>
+                <p style="font-weight:700; font-size:15px; margin-bottom:4px;">Temporal Weighting</p>
+                <p style="font-size:13px; color:#555; margin:0;">$\gamma(t_i)$ and Normalized Influence Metric $h(t_i)$ control per-timestep optimization strength.</p>
+              </div>
+            </div>
+            <div class="column">
+              <div style="border:1px solid #e0e0e0; border-radius:12px; padding:16px; text-align:center; height:100%;">
+                <p style="font-size:24px; margin-bottom:4px;">🛡️</p>
+                <p style="font-weight:700; font-size:15px; margin-bottom:4px;">Trust-Region</p>
+                <p style="font-size:13px; color:#555; margin:0;">$C_2(t_i)$ and clipping determine how much of each update survives regularization.</p>
+              </div>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <img class="thumb" src="static/images/schedules.png" alt="Temporal optimization strength h(t)" style="width:100%;">
+          <p class="fig-caption">
+            <b>Temporal Optimization Strength $h(t)$.</b>
+            (a, b) Successful first-order methods suppress value guidance at low-SNR timesteps, whereas improved zeroth-order methods suppress it at high-SNR timesteps. (a: Diffusion. b: Flow matching).
+            (c) Residual ∇-DB enforces stronger trust-region constraints for low-SNR timesteps. Policy Gradient’s $C_2(t)$ is depicted for constant $r(x_0) = 1$ and $\alpha = 10^-2$
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= TOY EXPERIMENT ======= -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-sixths">
+        <h2 class="title is-3">Isolated Estimator Analysis</h2>
+        <div class="content has-text-justified" style="font-size:18px;">
+          <p>We construct a 2D toy problem with analytically tractable optimal guidance $\Psi^*_{t_i}$ to compare first-order (FO) and zeroth-order (ZO) estimators under matched compute.</p>
+          <img class="thumb" src="static/images/toy_experiment.png" alt="Toy estimator analysis" style="width:100%; margin-top:8px;">
+          <p class="fig-caption">
+            <b>Toy analysis of estimator quality under fixed compute.</b>
+            (a) Reference distribution and its reward-tilted target. (b) RMSE of representative FO and ZO estimators: one-step lookahead FO guidance is severely biased at low SNR, while full-rollout ZO guidance is unbiased but requires many more samples; reward centering further reduces ZO error. (c) Lookahead depth, branching, and stochasticity localization tradeoffs — shallower lookahead can outperform full-rollout under limited budget; specific branching patterns matter less than <em>where</em> compute is allocated.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= MECHANISTIC ANALYSIS ======= -->
+<section class="section hero">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-sixths">
+        <h2 class="title is-3">Mechanistic Analysis</h2>
+        <div class="content has-text-justified" style="font-size:18px;">
+          <p>TempFlow-GRPO allocates branching budget uniformly, even though zeroth-order guidance is intrinsically noisier at high-SNR timesteps. RSM reveals this mismatch: make clipping timestep-fair, redistribute budget toward reliable timesteps, and deactivate the noisiest step.</p>
+
+          <img class="thumb" src="static/images/tempflow_aes_three_panel_metrics.png" alt="Mechanistic analysis" style="width:100%; margin-top:8px;">
+          <p class="fig-caption">
+            <b>Mechanistic analysis (zeroth-order flow matching, Aesthetic Score, SD3.5-M).</b>
+            (a) Reward vs. GPU hours and (b) reward vs. KL: Equal Variance Reallocation improves reward more quickly while maintaining the reward–KL tradeoff. (c) Clip fraction at $t_9$ (solid) and $t_8$ (dashed): the baseline suppresses $t_9$ via heavy clipping. Removing it and reallocating its budget yields a clean improvement without added compute.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= VALIDATION ======= -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-sixths">
+        <h2 class="title is-3">Validation Across Settings</h2>
+        <div class="content has-text-justified" style="font-size:18px;">
+
+          <h3 class="title is-4" style="margin-top:8px;">Zeroth-order Methods</h3>
+          <img class="thumb" src="static/images/zeroth_order_geneval_hps.png" alt="Zeroth-order results" style="width:100%; margin-top:8px;">
+          <p class="fig-caption">
+            <b>Zeroth-order validation.</b>
+            (a) GenEval on SD3.5-M: concentrating budget on low-SNR timesteps (where semantic guidance is most useful) reaches <b>GenEval = 0.97</b> with a <b>5× wall-clock speedup</b> over TempFlow-GRPO.
+            (b–c) HPSv2.1 on SD1.5 (PCPO baseline): sparse branching at 10% of reverse steps improves the reward–KL Pareto frontier under matched compute.
+          </p>
+
+          <hr class="section-divider">
+
+          <h3 class="title is-4">First-order Methods</h3>
+          <img class="thumb" src="static/images/firstorder-validation.png" alt="First-order results" style="width:100%; margin-top:8px;">
+          <p class="fig-caption">
+            <b>First-order validation.</b>
+            Replacing local Tweedie-based gradients $\nabla_{x_t}r(\hat{x}_0)$ with terminal-image reward gradients $\nabla_{x_0}r(x_0)$ yields substantially faster reward improvement on HPSv2.1 + GenEval training prompts, where both aesthetic quality and semantic fidelity matter.
+            (a–b) SD3.5-M (VGG-Flow baseline); (c–d) SD1.5 (Residual ∇-DB baseline).
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= AUXILIARY NETWORKS ======= -->
+<section class="section hero">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-sixths">
+        <h2 class="title is-3">Auxiliary Networks Are Redundant</h2>
+        <div class="content has-text-justified" style="font-size:18px;">
+          <p>Residual ∇-DB and VGG-Flow employ a learnable network $g_\phi$ to compensate for Tweedie approximation errors. RSM predicts this is unnecessary — and measurements confirm it.</p>
+
+          <div style="margin-top:14px;">
+            <div style="margin-bottom:28px;">
+              <img class="thumb" src="static/images/auxiliary_networks_useless.png" alt="g_phi norm is negligible" style="width:100%;">
+              <p class="fig-caption" style="text-align:center; margin-top:10px;">
+                <b>$\|g_\phi\|$ is negligible</b> throughout training for (a) Residual ∇-DB and (b) VGG-Flow. The network collapses toward zero due to spectral bias.
+              </p>
+            </div>
+            <div>
+              <img class="thumb" src="static/images/combined_ablation_1x4_compact.png" alt="Removing g_phi maintains performance" style="width:100%;">
+              <p class="fig-caption" style="text-align:center; margin-top:10px;">
+                <b>Removing $g_\phi$</b> maintains the reward–KL and reward–diversity Pareto frontiers while strictly reducing training time.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= QUALITATIVE ======= -->
+<section class="hero teaser is-light">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered" style="margin-bottom:10px;">
+        <h2 class="title is-3">Qualitative Results</h2>
+      </div>
+      <p style="text-align:center; font-size:17px; color:#555; margin-bottom:28px;">
+        Reward improvements are not driven by reward hacking, but by better optimization of the intended objective.
+      </p>
+
+      <!-- Tab buttons -->
+      <div class="tabs is-centered is-medium is-boxed" id="qual-tabs">
+        <ul>
+          <li class="is-active" data-tab="pcpo">
+            <a>
+              <span class="icon is-small"><i class="fas fa-chevron-right"></i></span>
+              <span>PCPO</span>
+            </a>
+          </li>
+          <li data-tab="resnabdb">
+            <a>
+              <span class="icon is-small"><i class="fas fa-chevron-right"></i></span>
+              <span>Residual ∇-DB</span>
+            </a>
+          </li>
+          <li data-tab="vggflow">
+            <a>
+              <span class="icon is-small"><i class="fas fa-chevron-right"></i></span>
+              <span>VGG-Flow</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tab content panels — full viewport width -->
+    <div id="qual-panel-pcpo" class="qual-panel" style="display:block;">
+      <p style="font-size:17px; text-align:center; font-weight:600; margin-bottom:6px; color:#333;">
+        Zeroth-order Diffusion · <span class="brand">PCPO → Ours</span> &nbsp;(SD1.5, HPSv2.1)
+      </p>
+      <p class="muted" style="text-align:center; margin-bottom:12px; font-size:14px;">
+        Sparse branching improves visual quality without sacrificing diversity.
+      </p>
+      <img src="static/images/qualitative_pcpo.jpg" alt="PCPO qualitative"
+           style="width:100%; display:block;">
+    </div>
+
+    <div id="qual-panel-resnabdb" class="qual-panel" style="display:none;">
+      <p style="font-size:17px; text-align:center; font-weight:600; margin-bottom:6px; color:#333;">
+        First-order Diffusion · <span class="brand">Residual ∇-DB → Ours</span> &nbsp;(SD1.5, HPSv2.1 + GenEval)
+      </p>
+      <p class="muted" style="text-align:center; margin-bottom:12px; font-size:14px;">
+        Terminal-image gradients improve semantic fidelity vs. local Tweedie-based guidance.
+      </p>
+      <img src="static/images/qualitative_resnabdb.jpg" alt="Residual NablaDB qualitative"
+           style="width:100%; display:block;">
+    </div>
+
+    <div id="qual-panel-vggflow" class="qual-panel" style="display:none;">
+      <p style="font-size:17px; text-align:center; font-weight:600; margin-bottom:6px; color:#333;">
+        First-order Flow Matching · <span class="brand">VGG-Flow → Ours</span> &nbsp;(SD3.5-M, HPSv2.1 + GenEval)
+      </p>
+      <p class="muted" style="text-align:center; margin-bottom:12px; font-size:14px;">
+        Faster reward improvement with competitive sample diversity.
+      </p>
+      <img src="static/images/qualitative_vggflow.jpg" alt="VGG-Flow qualitative"
+           style="width:100%; display:block;">
+    </div>
+
+  </div>
+</section>
+
+<!-- ======= BIBTEX ======= -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{lee2026rewardscorematching,
+  title     = {Reward Score Matching: Unifying Reward-based Fine-tuning for Flow and Diffusion Models},
+  author    = {Lee, Jeongjae and Chang, Jinho and Kim, Jeongsol and Ye, Jong Chul},
+  booktitle = {arxiv}
+  year      = {2026}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page. Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Qualitative tab switching
+    const tabs = document.querySelectorAll('#qual-tabs li');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        document.querySelectorAll('.qual-panel').forEach(p => p.style.display = 'none');
+        document.getElementById('qual-panel-' + tab.dataset.tab).style.display = 'block';
+      });
+    });
+  });
+  window.addEventListener('load', function() {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+  });
+</script>
+
+</body>
+</html>
